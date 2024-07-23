@@ -14,7 +14,7 @@ const SignupScreen: React.FC = () => {
   };
 
   return (
-    <View className="flex-1 justify-center items-center bg-gray-100 p-4">
+    <View className="">
       <AuthForm
         onSubmit={handleSignup}
         buttonText="Signup"

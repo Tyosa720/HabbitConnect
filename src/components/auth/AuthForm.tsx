@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button } from 'react-native';
 
 interface AuthFormProps {
   onSubmit: (email: string, password: string) => void;
@@ -22,32 +22,26 @@ const AuthForm: React.FC<AuthFormProps> = ({ onSubmit, buttonText, navigationTex
   };
 
   return (
-    <View style={styles.container}>
-      <Text>{buttonText}</Text>
+    <View className="flex-1 justify-center p-4">
+      <Text className="text-2xl font-bold mb-4">{buttonText}</Text>
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        style={styles.input}
+        className="border p-2 mb-4 rounded"
       />
       <TextInput
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        style={styles.input}
+        className="border p-2 mb-4 rounded"
       />
       <Button title={buttonText} onPress={handlePress} />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? <Text className="text-red-500 mt-4">{error}</Text> : null}
       <Button title={navigationText} onPress={onNavigate} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
-  input: { height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, padding: 8, width: '80%' },
-  error: { color: 'red', marginTop: 10 },
-});
 
 export default AuthForm;

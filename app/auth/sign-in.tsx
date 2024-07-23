@@ -10,11 +10,11 @@ export default function SignInScreen() {
 
   const handleLogin = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
-    router.replace('/(app)');
+    router.replace('/(tabs)');
   };
 
   return (
-    <View className="flex-1 justify-center items-center bg-gray-100 p-4">
+    <View className="">
       <AuthForm
         onSubmit={handleLogin}
         buttonText="Login"

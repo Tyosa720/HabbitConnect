@@ -6,11 +6,11 @@ export default function HomeScreen() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 justify-center items-center bg-gray-100 p-4">
+    <View className="flex-1 justify-center items-center p-4">
       <Text className="text-3xl font-bold mb-4">Welcome Home</Text>
       <TouchableOpacity
         className="bg-blue-500 rounded-full px-6 py-3 mb-2"
-        onPress={() => router.push('/sign-in')}
+        onPress={() => router.push('/auth/sign-in')}
       >
         <Text className="text-white text-lg">Go to Login</Text>
       </TouchableOpacity>
