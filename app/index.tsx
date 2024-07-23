@@ -1,19 +1,25 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      <Text>Home Screen</Text>
-      <Button title="Go to Login" onPress={() => router.push('/auth/login')} />
-      <Button title="Go to Signup" onPress={() => router.push('/auth/signup')} />
+    <View className="flex-1 justify-center items-center bg-gray-100 p-4">
+      <Text className="text-3xl font-bold mb-4">Welcome Home</Text>
+      <TouchableOpacity
+        className="bg-blue-500 rounded-full px-6 py-3 mb-2"
+        onPress={() => router.push('/sign-in')}
+      >
+        <Text className="text-white text-lg">Go to Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        className="bg-green-500 rounded-full px-6 py-3"
+        onPress={() => router.push('/auth/signup')}
+      >
+        <Text className="text-white text-lg">Go to Signup</Text>
+      </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-});
