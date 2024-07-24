@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { ThemeProvider, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { Slot } from 'expo-router';
-import { useColorScheme } from '@/src/hooks/useColorScheme';
+import { ThemeProvider } from '@/src/context/ThemeContext';
 import { SessionProvider } from '@/src/context/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 import { ActivityIndicator, Button, View, Text } from 'react-native';
-import { NativeWindStyleSheet } from "nativewind";
+import "@/global.css";
 
 
 export default function RootLayout() {
-  const [colorScheme, setColorScheme] = useState(useColorScheme());
   const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  NativeWindStyleSheet.setOutput({
-    default: "native",
-  });
+ const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     async function loadFonts() {
@@ -38,14 +34,10 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <SessionProvider>
-        <SafeAreaView className="flex-1 font-montserrat font-bold">
+        <SafeAreaView className="bg-background flex-1 font-montserrat font-bold">
           <Slot />
-          <Button title="Toggle System UI" onPress={() => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')}  />
         </SafeAreaView>
       </SessionProvider>
-      <Text>Test</Text>
-    </ThemeProvider>
   );
 }
