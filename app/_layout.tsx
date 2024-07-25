@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import { Slot } from 'expo-router';
-import { ThemeProvider } from '@/src/context/ThemeContext';
 import { SessionProvider } from '@/src/context/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 import { ActivityIndicator, Button, View, Text } from 'react-native';
-import "@/global.css";
-
+import '@/global.css';
+import { NativeWindStyleSheet } from 'nativewind';
 
 export default function RootLayout() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
- const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
+  NativeWindStyleSheet.setOutput({
+    default: 'native',
+  });
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
@@ -28,16 +34,14 @@ export default function RootLayout() {
   }, []);
 
   if (!fontsLoaded) {
-    return (
-        <ActivityIndicator size="large" />
-    );
+    return <ActivityIndicator size="large" />;
   }
 
   return (
-      <SessionProvider>
-        <SafeAreaView className="bg-background flex-1 font-montserrat font-bold">
-          <Slot />
-        </SafeAreaView>
-      </SessionProvider>
+    <SessionProvider>
+      <SafeAreaView className="bg-background flex-1 font-montserrat font-bold">
+        <Slot />
+      </SafeAreaView>
+    </SessionProvider>
   );
 }

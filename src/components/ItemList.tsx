@@ -1,7 +1,7 @@
-import React from "react";
-import { FlatList } from "react-native";
-import Item from "./Item";
-import ItemProps from "@/src/types/item";
+import React from 'react';
+import { FlatList } from 'react-native';
+import Item from './Item';
+import ItemProps from '@/src/types/item';
 
 interface ItemListProps {
   items: ItemProps[];

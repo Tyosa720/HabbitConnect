@@ -12,9 +12,18 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: 'black',
         },
-      }}>
-        <Tab.Screen name="index" component={Slot} options={{headerShown:false}}/>
-        <Tab.Screen name="settings" component={Slot} options={{headerShown:false}}/>
+      }}
+    >
+      <Tab.Screen
+        name="index"
+        component={Slot}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="settings"
+        component={Slot}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
-} 
+}
