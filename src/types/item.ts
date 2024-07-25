@@ -1,4 +1,4 @@
-import { Entypo } from "@expo/vector-icons";
+import { Entypo } from '@expo/vector-icons';
 
 interface ItemProps {
   title: string;

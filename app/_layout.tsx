@@ -5,17 +5,20 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import { Slot } from 'expo-router';
-import { ThemeProvider } from '@/src/context/ThemeContext';
 import { SessionProvider } from '@/src/context/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 import { ActivityIndicator, Button, View, Text } from 'react-native';
 import '@/global.css';
+import { NativeWindStyleSheet } from 'nativewind';
 
 export default function RootLayout() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
+  NativeWindStyleSheet.setOutput({
+    default: 'native',
+  });
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({

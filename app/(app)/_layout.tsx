@@ -24,5 +24,5 @@ export default function ProtectedLayout() {
     return null;
   }*/
 
-  return <Slot />;
+  return <Slot />
 }

@@ -28,7 +28,7 @@ export const themes = {
     "--color-grey-default": "#979797",
     "--color-slate-default": "#38383a",
     "--color-dark-default": "#1f355b",
-    "--color-light-default": "#1E1E1E",
+    "--color-light-default": "#1E1E1E"
     "--color-overlay":
       "rgba(255, 255, 255, .05)"
   }),

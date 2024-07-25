@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import CircularProgress from "react-native-circular-progress-indicator";
-import { Entypo } from "@expo/vector-icons";
+import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import CircularProgress from 'react-native-circular-progress-indicator';
+import { Entypo } from '@expo/vector-icons';
 
 interface ItemProps {
   title: string;

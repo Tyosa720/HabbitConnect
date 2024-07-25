@@ -16,12 +16,6 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="bg-background flex-1 font-montserrat font-bold">
       <View className="flex-1 justify-center items-center p-4">
-        <Image
-          style={{ width: 200, height: 200 }}
-          source={require('@/src/assets/logo.png')}
-          contentFit="cover"
-          className="flex-1 w-full"
-        />
         <AuthForm
           onSubmit={handleLogin}
           buttonText="Login"
