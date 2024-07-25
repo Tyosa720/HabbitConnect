@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "663892545501",
+    "firebase_url": "https://habitconnect-f721c-default-rtdb.firebaseio.com",
+    "project_id": "habitconnect-f721c",
+    "storage_bucket": "habitconnect-f721c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663892545501:android:ec2026b70e7bef854cf034",
+        "android_client_info": {
+          "package_name": "HabbitConnect.android.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeljS7B5uc7cZq1zREjo3G05fSfb5v_RA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

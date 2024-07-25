@@ -11,8 +11,6 @@ web-build/
 *.jks
 
 # React Native
-ios/
-android/
 !ios/Podfile
 !android/app/src/main/res
 

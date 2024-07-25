@@ -3,7 +3,7 @@
     "userInterfaceStyle": "automatic",
     "android": {
       "googleServicesFile": "./google-services.json",
-      "package": "com.anonymous.app"
+      "package": "HabbitConnect.android.com"
     },
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
