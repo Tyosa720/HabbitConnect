@@ -1,5 +1,6 @@
 {
   "expo": {
+    "userInterfaceStyle": "automatic",
     "android": {
       "googleServicesFile": "./google-services.json",
       "package": "com.anonymous.app"
@@ -18,7 +19,8 @@
             "useFrameworks": "static"
           }
         }
-      ]
+      ],
+      "expo-secure-store"
     ]
   }
 }

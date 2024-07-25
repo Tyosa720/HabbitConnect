@@ -1,28 +1,43 @@
-import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { useColorScheme } from '@/src/hooks/useColorScheme';
-import * as SplashScreen from 'expo-splash-screen';
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { Slot } from 'expo-router';
+import { ThemeProvider } from '@/src/context/ThemeContext';
+import { SessionProvider } from '@/src/context/AuthContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Font from 'expo-font';
+import { ActivityIndicator, Button, View, Text } from 'react-native';
+import "@/global.css";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+ const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    SplashScreen.hideAsync();
+    async function loadFonts() {
+      await Font.loadAsync({
+        'Montserrat-Regular': require('@/src/assets/fonts/Montserrat-Regular.ttf'),
+        'Montserrat-Bold': require('@/src/assets/fonts/Montserrat-Bold.ttf'),
+        'Montserrat-Italic': require('@/src/assets/fonts/Montserrat-Italic.ttf'),
+        'Montserrat-BoldItalic': require('@/src/assets/fonts/Montserrat-BoldItalic.ttf'),
+      });
+      setFontsLoaded(true);
+    }
+
+    loadFonts();
   }, []);
 
+  if (!fontsLoaded) {
+    return (
+        <ActivityIndicator size="large" />
+    );
+  }
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="auth/login" options={{ title: 'Login' }} />
-        <Stack.Screen name="auth/signup" options={{ title: 'Signup' }} />
-        <Stack.Screen name="not-found" options={{ title: 'Not Found' }} />
-      </Stack>
-    </ThemeProvider>
+      <SessionProvider>
+        <SafeAreaView className="bg-background flex-1 font-montserrat font-bold">
+          <Slot />
+        </SafeAreaView>
+      </SessionProvider>
   );
 }
