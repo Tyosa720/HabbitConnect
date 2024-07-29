@@ -8,7 +8,6 @@ export default function TabsLayout() {
   return (
     <Tab.Navigator
       screenOptions={{
-        animation: 'fade',
         tabBarStyle: {
           backgroundColor: 'black',
         },
