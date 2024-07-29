@@ -14,12 +14,18 @@ const CreateHabitScreen = () => {
   };
 
   return (
-    <View className="flex-1 justify-center p-4">
+    <View className="flex-1 justify-center bg-background">
       <HabitForm
         onSubmit={handleCreateHabit}
         defaultValues={{
           title: '',
-          frequency: '',
+          description: '',
+          frequency: 'Daily',
+          reminders: 'Morning',
+          objectiveValue: '1',
+          objectiveUnit: 'unit',
+          category: 'Personal',
+          notes: '',
           icon: { library: 'FontAwesome', iconName: 'home' },
         }}
       />
