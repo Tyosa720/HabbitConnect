@@ -29,27 +29,26 @@ const AuthForm: React.FC<AuthFormProps> = ({
   };
 
   return (
-    <View className="flex-1 justify-center w-2/3">
-      <Text className="text-text text-2xl font-bold mb-4 text-center">
-        {buttonText}
-      </Text>
+    <View className="flex-1 w-2/3">
       <TextInput
         placeholder="Email"
         value={email}
+        placeholderTextColor="#ECEDEE"
         onChangeText={setEmail}
-        className="text-text border p-2 mb-4 rounded border-gold w-full"
+        className="text-text border h-8 mb-4 p-2 rounded border-gold w-full focus-visible:outline-8 focus-within:border-0"
       />
       <TextInput
+        placeholderTextColor="#ECEDEE"
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        className="text-text border p-2 mb-4 rounded border-gold"
+        className="text-text h-8 border p-2 mb-4 rounded border-gold"
       />
       {error ? <Text className="text-red-500 mt-4">{error}</Text> : null}
       <TouchableOpacity
         onPress={handlePress}
-        className="rounded-full px-6 py-3 mb-2 bg-gold"
+        className="rounded-full px-6 py-3 mb-2 bg-gold h-12"
       >
         <Text className="text-black text-sm text-center">{buttonText}</Text>
       </TouchableOpacity>

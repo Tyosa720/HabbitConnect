@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from '@react-navigation/native';
 import { Slot } from 'expo-router';
 import { SessionProvider } from '@/src/context/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,7 +9,6 @@ import { NativeWindStyleSheet } from 'nativewind';
 
 export default function RootLayout() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [isDark, setIsDark] = useState(false);
 
   NativeWindStyleSheet.setOutput({
     default: 'native',
@@ -39,7 +33,7 @@ export default function RootLayout() {
 
   return (
     <SessionProvider>
-      <SafeAreaView className="bg-background flex-1 font-montserrat font-bold">
+      <SafeAreaView className="flex-1 justify-center">
         <Slot />
       </SafeAreaView>
     </SessionProvider>

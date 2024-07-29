@@ -15,7 +15,7 @@ const ItemList: React.FC<ItemListProps> = ({ items }) => {
       data={items}
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
-      className="p-4 bg-background"
+      className="bg-background"
     />
   );
 };
