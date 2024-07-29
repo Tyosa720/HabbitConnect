@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { Entypo } from '@expo/vector-icons';
-import { colors } from '../utils/Colors'; // Assurez-vous que le chemin est correct
+import { colors } from '@/src/constants/Colors'; // Assurez-vous que le chemin est correct
 
 interface ItemProps {
   title: string;

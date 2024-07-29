@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, Button, _View } from 'react-native';
+import { View, Text, Button, _View, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import ItemList from '@/src/components/ItemList';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import ItemProps from '@/src/types/item';
-import { colors } from '@/src/utils/Colors';
+import { colors } from '@/src/constants/Colors';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -40,6 +40,10 @@ export default function HomeScreen() {
         activeStrokeColor={colors.gold as string}
       />
       <ItemList items={items} />
+      <TouchableOpacity
+        onPress={() => router.push('/habit/create')}
+        className="bg-gold rounded-full px-6 py-3 mt-4"
+      />
     </View>
   );
 }
