@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Slot } from 'expo-router';
-import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -9,6 +8,7 @@ export default function TabsLayout() {
   return (
     <Tab.Navigator
       screenOptions={{
+        animation: 'fade',
         tabBarStyle: {
           backgroundColor: 'black',
         },

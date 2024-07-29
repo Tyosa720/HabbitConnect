@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import IconPickerModal from '@/src/components/icons/IconPickerModal'; // Assurez-vous que le chemin est correct
 import RNPickerSelect from 'react-native-picker-select';
 import {
@@ -37,11 +38,14 @@ interface HabitFormValues {
 }
 
 interface HabitFormProps {
-  onSubmit: (data: HabitFormValues) => void;
+  handleFormSubmit: (data: HabitFormValues) => void;
   defaultValues: HabitFormValues;
 }
 
-const HabitForm: React.FC<HabitFormProps> = ({ onSubmit, defaultValues }) => {
+const HabitForm: React.FC<HabitFormProps> = ({
+  handleFormSubmit,
+  defaultValues,
+}) => {
   const {
     control,
     handleSubmit,
@@ -57,6 +61,22 @@ const HabitForm: React.FC<HabitFormProps> = ({ onSubmit, defaultValues }) => {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+  };
+
+  const saveData = async (data: HabitFormValues) => {
+    try {
+      const jsonValue = JSON.stringify(data);
+      await AsyncStorage.setItem('@habit_data', jsonValue);
+      console.log('Data successfully saved');
+    } catch (e) {
+      console.error('Failed to save the data to the storage', e);
+    }
+  };
+
+  const onSubmit = (data: HabitFormValues) => {
+    const habitData = { ...data, icon };
+    saveData(habitData);
+    handleFormSubmit(habitData);
   };
 
   const IconComponent = ICON_LIBRARIES[icon.library];
@@ -293,7 +313,7 @@ const HabitForm: React.FC<HabitFormProps> = ({ onSubmit, defaultValues }) => {
       />
 
       <TouchableOpacity
-        onPress={handleSubmit((data) => onSubmit({ ...data, icon }))}
+        onPress={handleSubmit(onSubmit)}
         className="bg-gold rounded-full px-6 py-3 mt-4"
       >
         <Text className="text-lg text-black text-center bg-gold rounded-full p-2">
