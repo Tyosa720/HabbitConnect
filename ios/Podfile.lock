@@ -2647,7 +2647,7 @@ PODS:
     - React-perflogger (= 0.74.3)
     - React-utils (= 0.74.3)
   - RecaptchaInterop (100.0.0)
-  - RNCAsyncStorage (1.23.1):
+  - RNCAsyncStorage (1.24.0):
     - React-Core
   - RNCPicker (2.7.5):
     - React-Core
@@ -2737,6 +2737,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNSharedElement (0.8.9):
+    - React-Core
   - RNSVG (15.4.0):
     - React-Core
   - SDWebImage (5.19.4):
@@ -2841,6 +2843,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSharedElement (from `../node_modules/react-native-shared-element`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -3055,6 +3058,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSharedElement:
+    :path: "../node_modules/react-native-shared-element"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -3167,7 +3172,7 @@ SPEC CHECKSUMS:
   React-utils: 6f7ac39d9a0de447d4334bb25d144a28c0c5d8c9
   ReactCommon: 4a09c7d8a06e93c1e2e988a3b9f3db3d2449f2fc
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
+  RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
   RNCPicker: 3e2c37a8328f368ce14da050cdc8231deb5fc9f9
   RNFBApp: a7aff07a7f212149539fce51a1326c6d208b03ad
   RNFBAuth: 3ed676e60d0ca3b2c71023240658e1f02bc752d7
@@ -3177,6 +3182,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 20a4307fd21cbff339abfcfa68192f3f0a6a518b
   RNReanimated: d51431fd3597a8f8320319dce8e42cee82a5445f
   RNScreens: 30249f9331c3b00ae7cb7922e11f58b3ed369c07
+  RNSharedElement: 3fd05877bd6bc95f71b332801bf4356ca69ab7f6
   RNSVG: 3001c6aa5fbcf5383f98c2d61bf8b91b9ebda75c
   SDWebImage: 066c47b573f408f18caa467d71deace7c0f8280d
   SDWebImageAVIFCoder: 00310d246aab3232ce77f1d8f0076f8c4b021d90

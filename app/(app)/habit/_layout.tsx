@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useRouter, useSegments } from 'expo-router';
+import { Slot } from 'expo-router';
 
 const HabitLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const HabitLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <MaterialIcons name="close" size={24} color="white" />
         </TouchableOpacity>
       </View>
-      {children}
+      <Slot />
     </View>
   );
 };

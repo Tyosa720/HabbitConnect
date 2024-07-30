@@ -4,7 +4,8 @@ import { useRouter } from 'expo-router';
 import ItemList from '@/src/components/ItemList';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import ItemProps from '@/src/types/item';
-import { colors } from '@/src/constants/Colors';
+import { COLORS } from '@/src/constants/Colors';
+import { ScrollView } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -32,18 +33,16 @@ export default function HomeScreen() {
     },
   ];
   return (
-    <View className="flex-1 bg-background items-center p-4">
-      <CircularProgress
-        value={items.filter((item) => item.completion === 100).length}
-        maxValue={items.length}
-        valueSuffix={`/${items.length.toString()}`}
-        activeStrokeColor={colors.gold as string}
-      />
-      <ItemList items={items} />
-      <TouchableOpacity
-        onPress={() => router.push('/habit/create')}
-        className="bg-gold rounded-full px-6 py-3 mt-4"
-      />
-    </View>
+    <ScrollView className='flex-1 bg-background'>
+      <View className="items-center p-4">
+            <CircularProgress
+              value={items.filter((item) => item.completion === 100).length}
+              maxValue={items.length}
+              valueSuffix={`/${items.length.toString()}`}
+              activeStrokeColor={COLORS.gold as string}
+            />
+            <ItemList items={items} />
+      </View>
+    </ScrollView>
   );
 }

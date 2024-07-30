@@ -86,9 +86,6 @@ const HabitForm: React.FC<HabitFormProps> = ({
       contentContainerStyle={{ paddingBottom: 60 }}
       className="flex-1 bg-background p-6"
     >
-      <Text className="text-2xl font-semibold mb-4 text-text">
-        Créer une habitude
-      </Text>
       <Text className="text-lg mb-2 text-text">Nom de l'habitude</Text>
       <Controller
         control={control}
@@ -279,7 +276,7 @@ const HabitForm: React.FC<HabitFormProps> = ({
         name="notes"
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
-            className="h-12 border border-gold rounded-lg px-4 mb-3 text-text bg-background"
+            className="h-12 border border-gold rounded-lg px-4 py-4 mb-3 text-text bg-background"
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
