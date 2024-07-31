@@ -6,13 +6,15 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '.';
 import SettingsScreen from '.';
 import { COLORS } from '@/src/constants/Colors';
-import { Slot } from 'expo-router';
+import CreateHabitScreen from '../habit/create';
+import { useRouter } from 'expo-router';
 
 const Tab = createBottomTabNavigator();
-
+export function EmptyComponent() {
+  return null;
+  }
 const CustomTabBarButton = ({ children, onPress }) => (
   <TouchableOpacity
-    //convert style in nativewind
     style={{...styles.shadow}}
     className="-top-7 justify-center items-center"
     onPress={onPress}
@@ -31,6 +33,7 @@ const CustomTabBarButton = ({ children, onPress }) => (
 );
 
 const Tabs = () => {
+  const router = useRouter();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -83,7 +86,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Post"
-        component={HomeScreen}
+        component={EmptyComponent} // Pas de composant associé
         options={{
           tabBarIcon: ({ focused }) => (
             <Ionicons
@@ -93,13 +96,16 @@ const Tabs = () => {
             />
           ),
           tabBarButton: (props) => (
-            <CustomTabBarButton {...props} />
+            <CustomTabBarButton
+              {...props}
+              onPress={() => router.navigate('/habit/create')} // Utilisez la navigation directe
+            />
           )
         }}
       />
       <Tab.Screen
         name="Chat"
-        component={HomeScreen}
+        component={CreateHabitScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
@@ -141,7 +147,7 @@ export default function TabsLayout() {
 
 const styles = {
   shadow: {
-    shadowColor: '#7F5DF0',
+    shadowColor: COLORS.shadowGold,
     shadowOffset: {
       width: 0,
       height: 10

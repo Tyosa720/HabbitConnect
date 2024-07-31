@@ -1,5 +1,6 @@
+// IconPickerModal.tsx
 import React, { useState } from 'react';
-import { colors } from '@/src/constants/Colors';
+import { COLORS } from '@/src/constants/Colors';
 import {
   View,
   TextInput,
@@ -8,27 +9,11 @@ import {
   Text,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {
-  FontAwesome,
-  Ionicons,
-  MaterialCommunityIcons,
-} from '@expo/vector-icons';
-
-const ICON_LIBRARIES = {
-  FontAwesome,
-  Ionicons,
-  MaterialCommunityIcons,
-};
-
-type IconLibraryName = keyof typeof ICON_LIBRARIES;
-
+import {IconRenderer} from '@/src/components/icons/IconRenderer';
+import { IconLibraryName, ICON_LIBRARIES } from '@/src/types/Icon';
 interface IconItem {
   library: IconLibraryName;
   iconName: string;
-  IconComponent:
-    | typeof FontAwesome
-    | typeof Ionicons
-    | typeof MaterialCommunityIcons;
 }
 
 const ICONS: IconItem[] = Object.keys(ICON_LIBRARIES).flatMap((library) => {
@@ -36,7 +21,6 @@ const ICONS: IconItem[] = Object.keys(ICON_LIBRARIES).flatMap((library) => {
   return Object.keys(IconComponent.glyphMap).map((iconName) => ({
     library: library as IconLibraryName,
     iconName,
-    IconComponent,
   }));
 });
 
@@ -87,10 +71,10 @@ const IconPickerModal: React.FC<IconPickerModalProps> = ({
               }}
             >
               <View className="p-2 m-1 border-gray-300 border rounded items-center">
-                <item.IconComponent
-                  name={item.iconName as any}
-                  size={24}
-                  color={colors.text as string}
+                <IconRenderer
+                  library={item.library}
+                  iconName={item.iconName}
+                  color={COLORS.text as string}
                 />
               </View>
             </TouchableOpacity>

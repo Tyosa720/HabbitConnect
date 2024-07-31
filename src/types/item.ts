@@ -1,9 +1,7 @@
-import { Entypo } from '@expo/vector-icons';
-
 interface ItemProps {
   title: string;
   completion: number;
-  icon: keyof typeof Entypo.glyphMap;
+  icon: { library: string; iconName: string };
   frequency: string;
   onPress: () => void;
 }

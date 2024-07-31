@@ -12,7 +12,6 @@ export default function HomeScreen() {
     await signInWithEmailAndPassword(auth, email, password);
     router.replace('/(tabs)');
   };
-
   return (
     <View className="items-center">
       <View className="items-center mb-8">

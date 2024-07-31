@@ -1,45 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   TextInput,
-  Button,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import IconPickerModal from '@/src/components/icons/IconPickerModal'; // Assurez-vous que le chemin est correct
+import IconPickerModal from '@/src/components/icons/IconPickerModal';
 import RNPickerSelect from 'react-native-picker-select';
-import {
-  FontAwesome,
-  Ionicons,
-  MaterialCommunityIcons,
-} from '@expo/vector-icons';
-
-const ICON_LIBRARIES = {
-  FontAwesome,
-  Ionicons,
-  MaterialCommunityIcons,
-};
-
-type IconLibraryName = keyof typeof ICON_LIBRARIES;
-
-interface HabitFormValues {
-  title: string;
-  description: string;
-  frequency: string;
-  reminders: string;
-  objectiveValue: string;
-  objectiveUnit: string;
-  category: string;
-  notes: string;
-  icon: { library: IconLibraryName; iconName: string };
-}
+import { IconLibraryName, ICON_LIBRARIES } from '@/src/types/Icon';
+import Habit from '../types/Habit';
 
 interface HabitFormProps {
-  handleFormSubmit: (data: HabitFormValues) => void;
-  defaultValues: HabitFormValues;
+  handleFormSubmit: (data: Habit) => void;
+  defaultValues: Habit;
 }
 
 const HabitForm: React.FC<HabitFormProps> = ({
@@ -50,30 +26,61 @@ const HabitForm: React.FC<HabitFormProps> = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<HabitFormValues>({
+    setValue,
+  } = useForm<Habit>({
     defaultValues,
   });
+
   const [icon, setIcon] = useState<{
     library: IconLibraryName;
     iconName: string;
   }>(defaultValues.icon || { library: 'FontAwesome', iconName: 'home' });
+
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('@habit_data');
+        if (jsonValue != null) {
+          const data: Habit[] = JSON.parse(jsonValue);
+          const habit = data.find((h) => h.id === defaultValues.id);
+          if (habit) {
+            Object.keys(habit).forEach((key) => {
+              setValue(key as keyof Habit, habit[key as keyof Habit]);
+            });
+            setIcon(habit.icon);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load the data from storage', e);
+      }
+    };
+
+    if (defaultValues.id) {
+      loadData();
+    }
+  }, [defaultValues.id, setValue]);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const saveData = async (data: HabitFormValues) => {
+  const saveData = async (data: Habit) => {
     try {
-      const jsonValue = JSON.stringify(data);
-      await AsyncStorage.setItem('@habit_data', jsonValue);
+      const jsonValue = await AsyncStorage.getItem('@habit_data');
+      const habits: Habit[] = jsonValue != null ? JSON.parse(jsonValue) : [];
+      const updatedHabits = data.id
+        ? habits.map((h) => (h.id === data.id ? data : h))
+        : [...habits, { ...data, id: Date.now().toString() }];
+      await AsyncStorage.setItem('@habit_data', JSON.stringify(updatedHabits));
       console.log('Data successfully saved');
     } catch (e) {
       console.error('Failed to save the data to the storage', e);
     }
   };
 
-  const onSubmit = (data: HabitFormValues) => {
+  const onSubmit = (data: Habit) => {
     const habitData = { ...data, icon };
     saveData(habitData);
     handleFormSubmit(habitData);
@@ -113,6 +120,21 @@ const HabitForm: React.FC<HabitFormProps> = ({
         <Text className="text-error mb-2">{errors.title.message}</Text>
       )}
 
+      <Text className="text-lg mb-2 text-text">Icon</Text>
+      <TouchableOpacity onPress={toggleModal}>
+        <View className="h-12 border border-gold rounded-lg px-4 mb-3 flex flex-row items-center bg-background">
+          {IconComponent && (
+            <>
+              <IconComponent
+                name={icon.iconName as any}
+                size={24}
+                color="white"
+              />
+              <Text className="ml-2 text-text">{icon.iconName}</Text>
+            </>
+          )}
+        </View>
+      </TouchableOpacity>
       <Text className="text-lg mb-2 text-text">Description</Text>
       <Controller
         control={control}
@@ -287,21 +309,6 @@ const HabitForm: React.FC<HabitFormProps> = ({
         )}
       />
 
-      <Text className="text-lg mb-2 text-text">Icon</Text>
-      <TouchableOpacity onPress={toggleModal}>
-        <View className="h-12 border border-gold rounded-lg px-4 mb-3 flex flex-row items-center bg-background">
-          {IconComponent && (
-            <>
-              <IconComponent
-                name={icon.iconName as any}
-                size={24}
-                color="white"
-              />
-              <Text className="ml-2 text-text">{icon.iconName}</Text>
-            </>
-          )}
-        </View>
-      </TouchableOpacity>
 
       <IconPickerModal
         isVisible={isModalVisible}
@@ -314,7 +321,7 @@ const HabitForm: React.FC<HabitFormProps> = ({
         className="bg-gold rounded-full px-6 py-3 mt-4"
       >
         <Text className="text-lg text-black text-center bg-gold rounded-full p-2">
-          Create habit
+          {defaultValues.id ? 'Update habit' : 'Create habit'}
         </Text>
       </TouchableOpacity>
     </ScrollView>
