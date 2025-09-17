@@ -14,6 +14,7 @@ module.exports = {
         background: '#1D1E22',
         text: '#ECEDEE',
         gold: '#f4be7e',
+        shadowGold: '#e0a95b'
       },
     },
   },

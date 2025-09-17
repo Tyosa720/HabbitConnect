@@ -1,47 +1,85 @@
-import React from 'react';
-import { View, Text, Button, _View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import ItemList from '@/src/components/ItemList';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CircularProgress from 'react-native-circular-progress-indicator';
-import ItemProps from '@/src/types/item';
+import ItemList from '@/src/components/ItemList';
+import { COLORS } from '@/src/constants/Colors';
+import Habit from '@/src/types/Habit';
+interface ItemProps extends Habit {
+  onPress: () => void;
+  onDelete: () => void;
+  onEdit: () => void;
+}
 export default function HomeScreen() {
   const router = useRouter();
-  const items: ItemProps[] = [
-    {
-      title: 'Title',
-      completion: 60,
-      icon: 'aircraft',
-      frequency: 'Daily',
-      onPress: () => router.push('/item/1'),
-    },
-    {
-      title: 'Title',
-      completion: 60,
-      icon: 'aircraft',
-      frequency: 'Daily',
-      onPress: () => router.push('/item/2'),
-    },
-    {
-      title: 'Title',
-      completion: 60,
-      icon: 'aircraft',
-      frequency: 'Daily',
-      onPress: () => router.push('/item/3'),
-    },
-  ];
+  const [items, setItems] = useState<ItemProps[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('@ItemProps_data');
+        if (jsonValue != null) {
+          const data: ItemProps[] = JSON.parse(jsonValue);
+          setItems(data);
+        }
+      } catch (e) {
+        console.error('Failed to load the data from storage', e);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const deleteItemProps = async (id: string) => {
+    const filteredItems = items.filter(item => item.id !== id);
+    setItems(filteredItems);
+    await AsyncStorage.setItem('@ItemProps_data', JSON.stringify(filteredItems));
+  };
+
+  const confirmDeleteItemProps = (id: string) => {
+    Alert.alert(
+      "Delete ItemProps",
+      "Are you sure you want to delete this ItemProps?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => deleteItemProps(id)
+        }
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const handlePressItem = (id: string) => {
+    router.push(`/item/${id}`);
+  };
+
+  const handleEditItem = (id: string) => {
+    router.push(`/edit-ItemProps/${id}`);
+  };
+
   return (
-    <View className="flex-1 bg-background">
-      <CircularProgress
-        value={60}
-        radius={120}
-        duration={2000}
-        progressValueColor={'#ecf0f1'}
-        maxValue={200}
-        title={'KM/H'}
-        titleColor={'white'}
-        titleStyle={{ fontWeight: 'bold' }}
-      />
-      <ItemList items={items} />
-    </View>
+    <ScrollView className="flex-1 bg-background">
+      <View className="items-center p-4">
+        <CircularProgress
+          value={items.filter((item) => item.completion === 100).length}
+          maxValue={items.length}
+          valueSuffix={`/${items.length.toString()}`}
+          activeStrokeColor={COLORS.gold as string}
+        />
+        <ItemList
+          items={items}
+          onPressItem={handlePressItem}
+          onDeleteItem={confirmDeleteItemProps}
+          onEditItem={handleEditItem}
+        />
+      </View>
+    </ScrollView>
   );
 }

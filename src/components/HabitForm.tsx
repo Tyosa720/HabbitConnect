@@ -1,0 +1,331 @@
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import IconPickerModal from '@/src/components/icons/IconPickerModal';
+import RNPickerSelect from 'react-native-picker-select';
+import { IconLibraryName, ICON_LIBRARIES } from '@/src/types/Icon';
+import Habit from '../types/Habit';
+
+interface HabitFormProps {
+  handleFormSubmit: (data: Habit) => void;
+  defaultValues: Habit;
+}
+
+const HabitForm: React.FC<HabitFormProps> = ({
+  handleFormSubmit,
+  defaultValues,
+}) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<Habit>({
+    defaultValues,
+  });
+
+  const [icon, setIcon] = useState<{
+    library: IconLibraryName;
+    iconName: string;
+  }>(defaultValues.icon || { library: 'FontAwesome', iconName: 'home' });
+
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('@habit_data');
+        if (jsonValue != null) {
+          const data: Habit[] = JSON.parse(jsonValue);
+          const habit = data.find((h) => h.id === defaultValues.id);
+          if (habit) {
+            Object.keys(habit).forEach((key) => {
+              setValue(key as keyof Habit, habit[key as keyof Habit]);
+            });
+            setIcon(habit.icon);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load the data from storage', e);
+      }
+    };
+
+    if (defaultValues.id) {
+      loadData();
+    }
+  }, [defaultValues.id, setValue]);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const saveData = async (data: Habit) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@habit_data');
+      const habits: Habit[] = jsonValue != null ? JSON.parse(jsonValue) : [];
+      const updatedHabits = data.id
+        ? habits.map((h) => (h.id === data.id ? data : h))
+        : [...habits, { ...data, id: Date.now().toString() }];
+      await AsyncStorage.setItem('@habit_data', JSON.stringify(updatedHabits));
+      console.log('Data successfully saved');
+    } catch (e) {
+      console.error('Failed to save the data to the storage', e);
+    }
+  };
+
+  const onSubmit = (data: Habit) => {
+    const habitData = { ...data, icon };
+    saveData(habitData);
+    handleFormSubmit(habitData);
+  };
+
+  const IconComponent = ICON_LIBRARIES[icon.library];
+
+  return (
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: 60 }}
+      className="flex-1 bg-background p-6"
+    >
+      <Text className="text-lg mb-2 text-text">Nom de l'habitude</Text>
+      <Controller
+        control={control}
+        name="title"
+        rules={{
+          required: 'Title is required',
+          maxLength: {
+            value: 50,
+            message: 'Title cannot exceed 50 characters',
+          },
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            className="h-12 border border-gold rounded-lg px-4 mb-3 text-text bg-background"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            maxLength={50}
+            placeholder="Ex: Faire de l'exercice"
+            placeholderTextColor="#7c7c7c"
+          />
+        )}
+      />
+      {errors.title && (
+        <Text className="text-error mb-2">{errors.title.message}</Text>
+      )}
+
+      <Text className="text-lg mb-2 text-text">Icon</Text>
+      <TouchableOpacity onPress={toggleModal}>
+        <View className="h-12 border border-gold rounded-lg px-4 mb-3 flex flex-row items-center bg-background">
+          {IconComponent && (
+            <>
+              <IconComponent
+                name={icon.iconName as any}
+                size={24}
+                color="white"
+              />
+              <Text className="ml-2 text-text">{icon.iconName}</Text>
+            </>
+          )}
+        </View>
+      </TouchableOpacity>
+      <Text className="text-lg mb-2 text-text">Description</Text>
+      <Controller
+        control={control}
+        name="description"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            className="h-12 border border-gold rounded-lg px-4 mb-3 text-text bg-background"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="Ex: Boire 2 litres d'eau par jour"
+            placeholderTextColor="#7c7c7c"
+          />
+        )}
+      />
+
+      <Text className="text-lg mb-2 text-text">Fréquence</Text>
+      <Controller
+        control={control}
+        name="frequency"
+        rules={{ required: 'Frequency is required' }}
+        render={({ field: { onChange, value } }) => (
+          <View className="border border-gold rounded-lg mb-3 bg-background">
+            <RNPickerSelect
+              onValueChange={onChange}
+              items={[
+                { label: 'Quotidienne', value: 'daily' },
+                { label: 'Hebdomadaire', value: 'weekly' },
+                { label: 'Mensuelle', value: 'monthly' },
+                { label: 'Annuelle', value: 'yearly' },
+              ]}
+              value={value}
+              style={{
+                inputIOS: {
+                  color: 'white',
+                  padding: 12,
+                },
+                inputAndroid: {
+                  color: 'white',
+                },
+              }}
+              placeholder={{
+                label: 'Sélectionnez la fréquence',
+                value: null,
+                color: '#7c7c7c',
+              }}
+            />
+          </View>
+        )}
+      />
+      {errors.frequency && (
+        <Text className="text-error mb-2">{errors.frequency.message}</Text>
+      )}
+
+      <Text className="text-lg mb-2 text-text">Objectif</Text>
+      <View className="flex flex-row items-center mb-3">
+        <Controller
+          control={control}
+          name="objectiveValue"
+          rules={{
+            required: 'Objective value is required',
+            pattern: {
+              value: /^[0-9]*$/,
+              message: 'Objective value must be a number',
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              className="h-12 border border-gold rounded-lg px-4 text-text bg-background flex-1 mr-2"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              keyboardType="numeric"
+              placeholder="Ex: 30"
+              placeholderTextColor="#7c7c7c"
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="objectiveUnit"
+          rules={{ required: 'Objective unit is required' }}
+          render={({ field: { onChange, value } }) => (
+            <View className="border border-gold rounded-lg flex-1 bg-background">
+              <RNPickerSelect
+                onValueChange={onChange}
+                items={[
+                  { label: 'Litres', value: 'litres' },
+                  { label: 'Minutes', value: 'minutes' },
+                  { label: 'Pages', value: 'pages' },
+                ]}
+                value={value}
+                style={{
+                  inputIOS: {
+                    color: 'white',
+                    padding: 12,
+                  },
+                  inputAndroid: {
+                    color: 'white',
+                  },
+                }}
+                placeholder={{
+                  label: 'Unité',
+                  value: null,
+                  color: '#7c7c7c',
+                }}
+              />
+            </View>
+          )}
+        />
+      </View>
+      {errors.objectiveValue && (
+        <Text className="text-error mb-2">{errors.objectiveValue.message}</Text>
+      )}
+      {errors.objectiveUnit && (
+        <Text className="text-error mb-2">{errors.objectiveUnit.message}</Text>
+      )}
+
+      <Text className="text-lg mb-2 text-text">Catégorie</Text>
+      <Controller
+        control={control}
+        name="category"
+        rules={{ required: 'Category is required' }}
+        render={({ field: { onChange, value } }) => (
+          <View className="border border-gold rounded-lg mb-3 bg-background">
+            <RNPickerSelect
+              onValueChange={onChange}
+              items={[
+                { label: 'Santé', value: 'health' },
+                { label: 'Bien-être', value: 'wellbeing' },
+                { label: 'Productivité', value: 'productivity' },
+                { label: 'Apprentissage', value: 'learning' },
+                { label: 'Loisirs', value: 'leisure' },
+              ]}
+              value={value}
+              style={{
+                inputIOS: {
+                  color: 'white',
+                  padding: 12,
+                },
+                inputAndroid: {
+                  color: 'white',
+                },
+              }}
+              placeholder={{
+                label: 'Sélectionnez une catégorie',
+                value: null,
+                color: '#7c7c7c',
+              }}
+            />
+          </View>
+        )}
+      />
+      {errors.category && (
+        <Text className="text-error mb-2">{errors.category.message}</Text>
+      )}
+
+      <Text className="text-lg mb-2 text-text">Notes</Text>
+      <Controller
+        control={control}
+        name="notes"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            className="h-12 border border-gold rounded-lg px-4 py-4 mb-3 text-text bg-background"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            multiline={true}
+            placeholder="Notes supplémentaires"
+            placeholderTextColor="#7c7c7c"
+          />
+        )}
+      />
+
+
+      <IconPickerModal
+        isVisible={isModalVisible}
+        onClose={toggleModal}
+        onSelect={(selectedIcon) => setIcon(selectedIcon)}
+      />
+
+      <TouchableOpacity
+        onPress={handleSubmit(onSubmit)}
+        className="bg-gold rounded-full px-6 py-3 mt-4"
+      >
+        <Text className="text-lg text-black text-center bg-gold rounded-full p-2">
+          {defaultValues.id ? 'Update habit' : 'Create habit'}
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+};
+
+export default HabitForm;
